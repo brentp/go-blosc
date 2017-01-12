@@ -40,8 +40,17 @@ func Compress(level int, shuffle bool, slice interface{}) []byte {
 	return compressed[:csize]
 }
 
+type typed []byte
+
+const maxSize = 1<<36 - 1
+
+func (c typed) Uint16s() []uint16 {
+	n := len(c) / int(unsafe.Sizeof(uint16(0)))
+	return (*[maxSize]uint16)(unsafe.Pointer(&c[0]))[:n]
+}
+
 // Decompress takes a byte of compressed data and returns the uncompressed data.
-func Decompress(compressed []byte) []byte {
+func Decompress(compressed []byte) typed {
 
 	nbytes := C.size_t(0)
 	cbytes := C.size_t(0)
