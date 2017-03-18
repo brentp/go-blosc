@@ -35,7 +35,7 @@ func TestUint16(t *testing.T) {
 
 	cmp := Compress(1, true, tt)
 	dec := Decompress(cmp).Uint16s()
-	if len(dec)/int(unsafe.Sizeof(tt[0])) != len(tt) {
+	if len(dec) != len(tt) {
 		t.Fatal("unexpected length on decompression")
 	}
 	if !reflect.DeepEqual(dec, tt) {
