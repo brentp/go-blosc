@@ -1,6 +1,7 @@
 package blosc
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
 	"unsafe"
@@ -42,4 +43,18 @@ func TestUint16(t *testing.T) {
 		t.Fatalf("unequal after decompression %+v, %+v", dec, tt)
 	}
 
+}
+
+func TestBytes(t *testing.T) {
+
+	tt := []byte("This is a bag of bytes")
+
+	cmp := Compress(1, true, tt)
+	dec := Decompress(cmp)
+	if len(dec) != len(tt) {
+		t.Fatal("unexpected length on decompression")
+	}
+	if !bytes.Equal(dec, tt) {
+		t.Fatalf("unequal after decompression %+v, %+v", dec, tt)
+	}
 }
