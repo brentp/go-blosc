@@ -15,5 +15,8 @@
 
 
 #include "blosc.c"
+#include "fastcopy.c"
 #include "blosclz.c"
 #include "shuffle.c"
+#include "lz4.c"
+#include "lz4hc.c"

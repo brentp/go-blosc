@@ -1,10 +1,10 @@
-package blosc
+package blosc_test
 
 import (
-	"bytes"
-	"reflect"
 	"testing"
 	"unsafe"
+
+	blosc "github.com/seerai/go-blosc"
 )
 
 func TestRoundTrip(t *testing.T) {
@@ -14,8 +14,16 @@ func TestRoundTrip(t *testing.T) {
 		buf[i] = int64(112)
 	}
 
-	cmp := Compress(1, true, buf)
-	dec := Decompress(cmp)
+	err := blosc.SetCompressor("lz4hc")
+	if err != nil {
+		t.Error(err)
+	}
+
+	cmp, err := blosc.Compress(1, true, buf)
+	if err != nil {
+		t.Error(err)
+	}
+	dec := blosc.Decompress(cmp)
 
 	if len(dec)/int(unsafe.Sizeof(buf[0])) != len(buf) {
 		t.Fatal("unexpected length on decompression")
@@ -28,33 +36,4 @@ func TestRoundTrip(t *testing.T) {
 		}
 	}
 
-}
-
-func TestUint16(t *testing.T) {
-
-	tt := []uint16{1, 2, 3, 4, 5, 6, 7, 8}
-
-	cmp := Compress(1, true, tt)
-	dec := Decompress(cmp).Uint16s()
-	if len(dec) != len(tt) {
-		t.Fatal("unexpected length on decompression")
-	}
-	if !reflect.DeepEqual(dec, tt) {
-		t.Fatalf("unequal after decompression %+v, %+v", dec, tt)
-	}
-
-}
-
-func TestBytes(t *testing.T) {
-
-	tt := []byte("This is a bag of bytes")
-
-	cmp := Compress(1, true, tt)
-	dec := Decompress(cmp)
-	if len(dec) != len(tt) {
-		t.Fatal("unexpected length on decompression")
-	}
-	if !bytes.Equal(dec, tt) {
-		t.Fatalf("unequal after decompression %+v, %+v", dec, tt)
-	}
 }
