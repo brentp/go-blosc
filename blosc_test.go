@@ -14,7 +14,7 @@ func TestRoundTrip(t *testing.T) {
 		buf[i] = int64(112)
 	}
 
-	err := blosc.SetCompressor("lz4hc")
+	err := blosc.SetCompressor("lz4")
 	if err != nil {
 		t.Error(err)
 	}

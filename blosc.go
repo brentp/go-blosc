@@ -2,10 +2,9 @@
 package blosc
 
 /*
-#cgo CFLAGS: -O2 -msse2 -I${SRCDIR}/c-blosc/blosc/ -I${SRCDIR}/c-blosc/internal-complibs/lz4-1.9.2 -D HAVE_LZ4=1
-#cgo LDFLAGS: -lpthread
-#include "blosc_include.h"
-
+#cgo CFLAGS: -O3 -msse2 -D HAVE_LZ4=1
+#cgo LDFLAGS: -lpthread -lblosc
+#include "blosc.h"
 int blosc_set_compressor_wrapper(char* compname) {
 	return blosc_set_compressor(compname);
 }
